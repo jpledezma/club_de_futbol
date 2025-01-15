@@ -11,8 +11,8 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
   
-  getMessage(): Observable<string> {
-    return this.http.get<string>(`${this.apiUrl}/`);
+  getMessage(): Observable<{message:string}> {
+    return this.http.get<{message:string}>(`${this.apiUrl}/`);
   }
 }
  

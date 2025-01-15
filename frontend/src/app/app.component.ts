@@ -18,7 +18,7 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     this.apiService.getMessage().subscribe(
       (response) => {
-        this.message = response;
+        this.message = response.message;
       },
       (error) => {
         console.error('Error al obtener el mensaje:', error);
