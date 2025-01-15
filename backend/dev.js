@@ -14,4 +14,5 @@ exec("tsc", (err, stdout, stderr) => {
             return;
         }
     });
+    console.log(stdout);
 });
