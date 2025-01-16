@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node main.js",
-    "dev": "npx nodemon --watch main.ts --watch src/*.ts --exec \"node ./dev.js\" ",
+    "dev": "npx nodemon --watch main.ts --watch src/*.ts --ext \"ts json\" --exec \"tsc && node ./main.js\" ",
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

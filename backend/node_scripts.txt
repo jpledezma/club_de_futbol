@@ -1,0 +1,5 @@
+After git is installed, open Command Prompt and run 
+npm config set script-shell "C:\Program Files\Git\bin\bash.exe"
+This will force all npm scripts to run within the Git Bash standalone shell rather instead
+of using the default Windows configuration, allowing you to now run npm scripts containing
+Bash within a Windows environment.
