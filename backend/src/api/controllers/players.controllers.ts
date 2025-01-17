@@ -1,12 +1,41 @@
 import { Request, Response } from "express";
 import { sendServerError } from "../middlewares/middlewares.js";
 
+class Player{
+    id: number;
+    dni: string;  // usar dni como id?
+    firstName: string;
+    lastName: string;
+    category: number;
+    shirtNumber: number;
+    active: boolean;
+    // Había puesto su tutor/padre como atributo, pero si lo pongo dejaría de estar normalizada la db
+
+    constructor(
+        id: number,
+        dni: string,
+        firstName: string, 
+        lastName: string, 
+        category: number,
+        shirtNumber: number, // position ?
+        active: boolean
+    ) {
+        this.id = id;
+        this.dni = dni;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.category = category;
+        this.shirtNumber = shirtNumber;
+        this.active = active;
+    }
+}
+
 const players = [
-    { id: 0, name: "Albert Einstein", category: 2010, active: true },
-    { id: 1, name: "Isaac Newton", category: 2009, active: true },
-    { id: 2, name: "Michael Faraday", category: 2011, active: false },
-    { id: 3, name: "James Maxwell", category: 2010, active: false },
-    { id: 4, name: "Galileo Galilei", category: 2008, active: true },
+    new Player(0, "12345678", "Albert", "Einstein", 2015, 10, true),
+    new Player(1, "23456789", "Isaac", "Newton", 2009, 10, true),
+    new Player(2, "34567890", "Michael", "Faraday", 2011, 10, false),
+    new Player(3, "45678901", "James", "Maxwell", 2010, 10, false),
+    new Player(4, "56789012", "Galileo", "Galilei", 2009, 10, false),
 ];
 
 async function getPlayers (req: Request, res: Response) {
