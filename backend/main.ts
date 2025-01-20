@@ -1,10 +1,11 @@
 import express from "express";
 import cors from 'cors';
+import enviroment from "./src/api/config/environment.js";
 import playersRoutes from "./src/api/routes/players.routes.js"
 import parentsRoutes from "./src/api/routes/parents.routes.js"
 
 // settings
-const PORT = 3000;
+const PORT = enviroment.port;
 const app = express();
 app.set("PORT", PORT);
 
