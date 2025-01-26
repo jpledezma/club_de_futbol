@@ -1,14 +1,27 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db.js";
 import Teams from "./teams.model.js";
 
-const Players = sequelize.define('Players', {
+class Players extends Model{
+    declare id: number;
+    declare team: number;
+    declare dni: number;
+    declare firstName: string;
+    declare lastName: string;
+    declare birthDate: Date;
+    declare shirtNumber: number;
+    declare active: boolean;
+    declare createdAt: Date;
+    declare updatedAt: Date;
+}
+
+Players.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    teamId: {
+    team: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -22,11 +35,11 @@ const Players = sequelize.define('Players', {
         unique: true
     },
     firstName: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(50),
         allowNull: false,
     },
     lastName: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(50),
         allowNull: false,
     },
     birthDate: {
@@ -42,12 +55,13 @@ const Players = sequelize.define('Players', {
         allowNull: false,
     },
 }, {
+    sequelize,
     tableName: 'players',
     timestamps: true,
     underscored: true
 });
 
-Players.belongsTo(Teams, { foreignKey: 'teamId', as: 'team' });
+Players.belongsTo(Teams, { foreignKey: 'team' });
 
 
 export default Players;

@@ -1,7 +1,13 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db.js";
 
-const Teams = sequelize.define('Teams', {
+class Teams extends Model{
+    declare id: number;
+    declare category: number;
+    declare active: boolean;
+}
+
+Teams.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,7 +18,13 @@ const Teams = sequelize.define('Teams', {
         allowNull: false,
         unique: true
     },
+    active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+    }
 }, {
+    sequelize,
     tableName: 'teams',
     timestamps: false,
     underscored: true

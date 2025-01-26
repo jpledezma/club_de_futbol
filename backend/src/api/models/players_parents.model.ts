@@ -1,10 +1,15 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db.js";
 import Players from "./players.model.js";
 import Parents from "./parents.model.js";
 
-const PlayersParents = sequelize.define('PlayersParents', {
-    parentId: {
+class PlayersParents extends Model{
+    declare parent: number;
+    declare player: number
+}
+
+PlayersParents.init({
+    parent: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -13,7 +18,7 @@ const PlayersParents = sequelize.define('PlayersParents', {
             key: 'id'
         },
     },
-    playerId: {
+    player: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -23,13 +28,14 @@ const PlayersParents = sequelize.define('PlayersParents', {
         },
     },
 }, {
+    sequelize,
     tableName: 'players_parents',
     timestamps: false,
     underscored: true
 });
 
-PlayersParents.belongsTo(Players, { foreignKey: 'playerId', as: 'player' });
-PlayersParents.belongsTo(Parents, { foreignKey: 'parentId', as: 'parent' });
+PlayersParents.belongsTo(Players, { foreignKey: 'player' });
+PlayersParents.belongsTo(Parents, { foreignKey: 'parent' });
 
 
 export default PlayersParents;
