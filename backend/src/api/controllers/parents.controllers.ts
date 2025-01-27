@@ -1,44 +1,10 @@
 import { Request, Response } from "express";
 import { sendServerError } from "../middlewares/middlewares.js";
-
-class Parent{
-    id: number;
-    dni: string;
-    firstName: string;
-    lastName: string;
-    address: string;
-    phoneNumber: string;
-    email: string; // opcional?
-
-    constructor(
-        id: number,
-        dni: string,
-        firstName: string, 
-        lastName: string, 
-        address: string,
-        phoneNumber: string,
-        email: string,
-    ) {
-        this.id = id;
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
-}
-
-const parents = [
-    new Parent(0, "12345678", "Albert", "Einstein", "529822", "10", "asd@mail.com"),
-    new Parent(1, "23456789", "Isaac", "Newton", "529822", "10", "asd@mail.com"),
-    new Parent(2, "34567890", "Michael", "Faraday", "529822", "10", "asd@mail.com"),
-    new Parent(3, "45678901", "James", "Maxwell", "529822", "10", "asd@mail.com"),
-    new Parent(4, "56789012", "Galileo", "Galilei", "529822", "10", "asd@mail.com"),
-];
+import parentsService from "../services/parents.service.js";
 
 async function getParents (req: Request, res: Response) {
-    try {        
+    try {
+        const parents = await parentsService.getParents();
         res.status(200);
         res.json({ payload: parents });    
     }
@@ -51,7 +17,10 @@ async function getParentById(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        const parentFound = parents[+id];
+        if (!id || isNaN(Number(id.trim())))
+            throw new Error("Invalid format for 'id'");
+
+        const parentFound = await parentsService.getParentById(+id);
         if (parentFound) {
             res.status(200);
             res.json({ payload: parentFound });
@@ -67,10 +36,10 @@ async function getParentById(req: Request, res: Response) {
 }
 
 async function createParent(req: Request, res: Response) {
-    const parent = req.body;
+    const newParent = req.body;
 
     try {
-        parents.push(parent);
+        await parentsService.createParent(newParent)
         res.status(200);
         res.json({ message: "Parent created successfully" });
     }
@@ -81,20 +50,20 @@ async function createParent(req: Request, res: Response) {
 
 async function updateParent(req: Request, res: Response) {
     const { id } = req.params;
-    const updatedParent = req.body;
+    const newParentData = req.body;
     
     try {
-        const parentFound = parents[+id];
-        
-        if (parentFound) {
-            parents[+id] = updatedParent;
-            res.status(200);
-            res.json({ message: "Parent updated successfully" });
-        }
-        else {
+        if (!id || isNaN(Number(id)))
+            throw new Error("Invalid format for 'id'");
+
+        const updatedParent = await parentsService.updateParent(+id, newParentData)
+        if (updatedParent[0] === 0) {
             res.status(404);
             res.json({ 404: "Parent not found" });
+            return;
         }
+            res.status(200);
+            res.json({ message: "Parent updated successfully" });
     }
     catch (err: unknown) {
         sendServerError(res, err);
@@ -104,17 +73,19 @@ async function updateParent(req: Request, res: Response) {
 async function deleteParent(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        const parentFound = parents[+id];
+        if (!id || isNaN(Number(id)))
+            throw new Error("Invalid format for 'id'");
+
+        const deletedParent = await parentsService.deleteParent(+id);
         
-        if (parentFound) {
-            parents.splice(+id, 1);
-            res.status(200);
-            res.json({ message: "Parent deleted successfully" });
-        }
-        else {
+        if (deletedParent === 0) {
             res.status(404);
             res.json({ 404: "Parent not found" });
+            return;
         }
+        
+        res.status(200);
+        res.json({ message: "Parent deleted successfully" });
     }
     catch (err: unknown) {
         sendServerError(res, err)

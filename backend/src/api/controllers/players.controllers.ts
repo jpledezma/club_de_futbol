@@ -4,9 +4,7 @@ import playersService from "../services/players.service.js"
 
 async function getPlayers (req: Request, res: Response) {
     try {
-        const players = await playersService.getPlayers();
-        console.log(players);
-        
+        const players = await playersService.getPlayers();        
         res.status(200);
         res.json({ payload: players });    
     }
