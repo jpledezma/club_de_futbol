@@ -14,7 +14,7 @@ TrainingDays.init({
         primaryKey: true,
         allowNull: false,
         references: {
-            model: 'Teams',
+            model: Teams,
             key: 'id'
         },
     },

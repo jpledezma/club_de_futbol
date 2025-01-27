@@ -25,7 +25,7 @@ Coachs.init({
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'Teams',
+            model: Teams,
             key: 'id'
         },
     },

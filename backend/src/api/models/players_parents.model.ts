@@ -14,7 +14,7 @@ PlayersParents.init({
         primaryKey: true,
         allowNull: false,
         references: {
-            model: 'Parents',
+            model: Parents,
             key: 'id'
         },
     },
@@ -23,7 +23,7 @@ PlayersParents.init({
         primaryKey: true,
         allowNull: false,
         references: {
-            model: 'Players',
+            model: Players,
             key: 'id'
         },
     },

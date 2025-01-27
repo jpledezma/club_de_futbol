@@ -25,7 +25,7 @@ Players.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Teams',
+            model: Teams,
             key: 'id'
         },
     },
