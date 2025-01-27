@@ -20,14 +20,14 @@ async function getPlayers() {
     return players;
 }
 
-async function getPLayerById(id: number) {
+async function getPlayerById(id: number) {
     const player = await Players.findByPk(id);
     return player;
 }
 
-async function updatePlayer(id: number, newPLayer: any) {
+async function updatePlayer(id: number, newPlayer: any) {
     const player =  await Players.update(
-        newPLayer, {
+        newPlayer, {
             where: { id: id }
         }
     );
@@ -35,7 +35,7 @@ async function updatePlayer(id: number, newPLayer: any) {
     return player;
 }
 
-async function deletePLayer(id: number) {
+async function deletePlayer(id: number) {
     const player = await Players.destroy({ where: { id: id } });
     return player;
 }
@@ -43,7 +43,7 @@ async function deletePLayer(id: number) {
 export default {
     createPlayer,
     getPlayers,
-    getPLayerById,
+    getPlayerById,
     updatePlayer,
-    deletePLayer,
+    deletePlayer,
 }

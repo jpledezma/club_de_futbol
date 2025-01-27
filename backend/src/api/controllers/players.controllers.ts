@@ -22,7 +22,7 @@ async function getPlayerById(req: Request, res: Response) {
         if (!id || isNaN(Number(id)))
             throw new Error("Invalid format for 'id'");
 
-        const playerFound = await playersService.getPLayerById(+id);
+        const playerFound = await playersService.getPlayerById(+id);
         if (playerFound) {
             res.status(200);
             res.json({ payload: playerFound });
@@ -79,7 +79,7 @@ async function deletePlayer(req: Request, res: Response) {
         if (!id || isNaN(Number(id)))
             throw new Error("Invalid format for 'id'");
 
-        const deletedPlayer = await playersService.deletePLayer(+id);
+        const deletedPlayer = await playersService.deletePlayer(+id);
         if (deletedPlayer === 0) {
             res.status(404);
             res.json({ 404: "Player not found" });

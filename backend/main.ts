@@ -1,12 +1,12 @@
 import express from "express";
 import cors from 'cors';
-import enviroment from "./src/api/config/environment.js";
+import environment from "./src/api/config/environment.js";
 import playersRoutes from "./src/api/routes/players.routes.js"
 import parentsRoutes from "./src/api/routes/parents.routes.js"
 import initializeDatabase from "./src/api/database/index.js";
 
 // settings
-const PORT = enviroment.port;
+const PORT = environment.port;
 const app = express();
 app.set("PORT", PORT);
 initializeDatabase();
