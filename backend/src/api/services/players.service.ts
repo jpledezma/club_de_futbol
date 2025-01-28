@@ -25,7 +25,7 @@ async function getPlayerById(id: number) {
     return player;
 }
 
-async function updatePlayer(id: number, newPlayer: any) {
+async function updatePlayer(id: number, newPlayer: object) {
     const player =  await Players.update(
         newPlayer, {
             where: { id: id }
@@ -46,4 +46,4 @@ export default {
     getPlayerById,
     updatePlayer,
     deletePlayer,
-}
+};
