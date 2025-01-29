@@ -2,7 +2,7 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "../database/db.js";
 import Teams from "./teams.model.js";
 
-class Coachs extends Model {
+class Coaches extends Model {
     declare id: number;
     declare team: number;
     declare dni: number;
@@ -15,7 +15,7 @@ class Coachs extends Model {
     declare updatedAt: Date;
 }
 
-Coachs.init({
+Coaches.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -59,11 +59,11 @@ Coachs.init({
     },
 }, {
     sequelize,
-    tableName: "coachs",
+    tableName: "coaches",
     timestamps: true,
     underscored: true
 });
 
-Coachs.belongsTo(Teams, { foreignKey: 'team' });
+Coaches.belongsTo(Teams, { foreignKey: 'team' });
 
-export default Coachs;
+export default Coaches;
