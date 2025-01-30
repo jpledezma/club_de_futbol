@@ -5,7 +5,7 @@ const { db } = environment;
 
 const sequelize = new Sequelize(db.database, db.user, db.password, {
     host: db.host,
-    port: db.port,
+    port: +db.port,
     dialect: db.dialect as 'mysql' | 'postgres' | 'sqlite' | 'mssql' | 'mariadb',
     logging: false
 });
