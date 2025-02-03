@@ -1,7 +1,13 @@
 import Parents from "../models/parents.model.js";
 
-async function createParent(parent: Parents) {
-    const { dni, firstName, lastName, address, phoneNumber, email } = parent;
+async function createParent(
+    dni: number,
+    firstName: string,
+    lastName: string,
+    address: string,
+    phoneNumber: string,
+    email: string
+) {
     const newParent = await Parents.create({
         dni,
         firstName,
@@ -24,7 +30,7 @@ async function getParentById(id: number) {
     return parent;
 }
 
-async function updateParent(id: number, newParent: object) {
+async function updateParent(id: number, newParent: Record<PropertyKey, unknown>) {
     const parent =  await Parents.update(
         newParent, {
             where: { id: id }

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { sendServerError } from "../middlewares/middlewares.js";
+import { sendServerError, validateData } from "../middlewares/server.js";
 import playersService from "../services/players.service.js"
 import linkService from "../services/players_parents.service.js";
+import { validateId, removeExtraWhiteSpaces } from "../middlewares/validations.js";
 
 async function getPlayers (req: Request, res: Response) {
     try {
@@ -18,7 +19,7 @@ async function getPlayerById(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const playerFound = await playersService.getPlayerById(+id);
@@ -37,10 +38,20 @@ async function getPlayerById(req: Request, res: Response) {
 }
 
 async function createPlayer(req: Request, res: Response) {
-    const player = req.body;
+    const { team, dni, firstName, lastName, birthDate, shirtNumber, active } = req.body;
 
     try {
-        await playersService.createPlayer(player);
+        validateData({ team, dni, firstName, lastName, birthDate, shirtNumber, active });
+
+        await playersService.createPlayer(
+            +team,
+            +dni,
+            removeExtraWhiteSpaces(firstName),
+            removeExtraWhiteSpaces(lastName),
+            birthDate,
+            shirtNumber,
+            active
+        );
         res.status(200);
         res.json({ message: "Player created successfully" });
     }
@@ -54,8 +65,9 @@ async function updatePlayer(req: Request, res: Response) {
     const newPlayerData = req.body;
     
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        validateData(newPlayerData);
 
         const updatedPlayer = await playersService.updatePlayer(+id, newPlayerData);
         if (updatedPlayer[0] === 0) {
@@ -75,7 +87,7 @@ async function updatePlayer(req: Request, res: Response) {
 async function deletePlayer(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const deletedPlayer = await playersService.deletePlayer(+id);
@@ -96,9 +108,9 @@ async function deletePlayer(req: Request, res: Response) {
 async function linkPlayerParent(req: Request, res: Response) {
     const { playerId, parentId } = req.body;
     try {
-        if (!playerId || isNaN(Number(playerId)))
+        if (!validateId(+playerId))
             throw new Error("Invalid format for 'playerId'");
-        if (!parentId || isNaN(Number(parentId)))
+        if (!validateId(+parentId))
             throw new Error("Invalid format for 'parentId'");
 
         const link = await linkService.linkPlayerParent(playerId, parentId);
@@ -119,8 +131,8 @@ async function linkPlayerParent(req: Request, res: Response) {
 async function getParents(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
-            throw new Error("Invalid format for 'playerId'");
+        if (!validateId(+id))
+            throw new Error("Invalid format for 'id'");
 
         const parents = await linkService.getParents(+id);
         if (parents.length === 0) {
@@ -141,8 +153,10 @@ async function deleteParentLink(req: Request, res: Response) {
     const { id } = req.params;
     const { parentId } = req.body;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        if (!validateId(+parentId))
+            throw new Error("Invalid format for 'parentId'");
 
         const link = await linkService.deleteLink(parentId, +id);
         if (link === 0) {

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { sendServerError } from "../middlewares/middlewares.js";
+import { sendServerError, validateData } from "../middlewares/server.js";
 import parentsService from "../services/parents.service.js";
 import linkService from "../services/players_parents.service.js";
+import { validateId, removeExtraWhiteSpaces } from "../middlewares/validations.js";
 
 async function getParents (req: Request, res: Response) {
     try {
@@ -18,7 +19,7 @@ async function getParentById(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id.trim())))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const parentFound = await parentsService.getParentById(+id);
@@ -37,10 +38,19 @@ async function getParentById(req: Request, res: Response) {
 }
 
 async function createParent(req: Request, res: Response) {
-    const newParent = req.body;
+    const { dni, firstName, lastName, address, phoneNumber, email } = req.body;
 
     try {
-        await parentsService.createParent(newParent)
+        validateData({ dni, firstName, lastName, address, phoneNumber, email });
+
+        await parentsService.createParent(
+            +dni,
+            removeExtraWhiteSpaces(firstName),
+            removeExtraWhiteSpaces(lastName),
+            removeExtraWhiteSpaces(address),
+            phoneNumber,
+            email
+        )
         res.status(200);
         res.json({ message: "Parent created successfully" });
     }
@@ -54,8 +64,9 @@ async function updateParent(req: Request, res: Response) {
     const newParentData = req.body;
     
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        validateData(newParentData);
 
         const updatedParent = await parentsService.updateParent(+id, newParentData)
         if (updatedParent[0] === 0) {
@@ -74,7 +85,7 @@ async function updateParent(req: Request, res: Response) {
 async function deleteParent(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const deletedParent = await parentsService.deleteParent(+id);
@@ -96,7 +107,7 @@ async function deleteParent(req: Request, res: Response) {
 async function getChildren(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const children = await linkService.getChildren(+id);
@@ -118,8 +129,10 @@ async function deletePlayerLink(req: Request, res: Response) {
     const { id } = req.params;
     const { playerId } = req.body;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        if (!validateId(+playerId))
+            throw new Error("Invalid format for 'playerId'");
 
         const link = await linkService.deleteLink(+id, playerId);
         if (link === 0) {

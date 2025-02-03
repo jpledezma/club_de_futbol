@@ -3,8 +3,7 @@ import Players from "../models/players.model.js";
 import Coaches from "../models/coaches.model.js";
 import TrainingDays from "../models/training_days.model.js";
 
-async function createTeam(team: Teams) {
-    const { category, active } = team;
+async function createTeam(category: number, active: boolean) {
     const newTeam = await Teams.create({
         category,
         active

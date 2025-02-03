@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { sendServerError } from "../middlewares/middlewares.js";
-import teamsService from "../services/teams.service.js"
+import { sendServerError, validateData } from "../middlewares/server.js";
+import teamsService from "../services/teams.service.js";
+import { validateId } from "../middlewares/validations.js";
+
 
 async function getTeams(req: Request, res: Response) {
     try {
@@ -17,7 +19,7 @@ async function getAllData(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const teamFound = await teamsService.getAllData(+id);
@@ -39,7 +41,7 @@ async function getPlayers(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const teamFound = await teamsService.getPlayers(+id);
@@ -62,7 +64,7 @@ async function getCoaches(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const teamFound = await teamsService.getCoaches(+id);
@@ -84,7 +86,7 @@ async function getTrainingDays(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const teamFound = await teamsService.getTrainingDays(+id);
@@ -103,9 +105,11 @@ async function getTrainingDays(req: Request, res: Response) {
 }
 
 async function createTeam(req: Request, res: Response) {
-    const team = req.body;
+    const { category, active } = req.body;
     try {
-        await teamsService.createTeam(team);
+        validateData({ category, active });
+
+        await teamsService.createTeam(category, active);
         res.status(200);
         res.json({ message: "Team created successfully" });
     }
@@ -119,8 +123,9 @@ async function updateTeam(req: Request, res: Response) {
     const newTeamData = req.body;
     
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        validateData(newTeamData);
 
         const updatedTeam = await teamsService.updateTeam(+id, newTeamData);
         if (updatedTeam[0] === 0) {
@@ -140,7 +145,7 @@ async function updateTeam(req: Request, res: Response) {
 async function deleteTeam(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const deletedTeam = await teamsService.deleteTeam(+id);

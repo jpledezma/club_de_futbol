@@ -45,6 +45,15 @@ Players.init({
     birthDate: {
         type: DataTypes.DATE,
         allowNull: false,
+        validate: {
+            isDate: true,
+            isValidAge(value: Date) {                
+                let birthYear = value.getFullYear();
+                let currentYear = new Date().getFullYear();
+                if (birthYear > (currentYear - 6))
+                    throw new Error('Player must be at least 5 years old');
+            }
+        }
     },
     shirtNumber: {
         type: DataTypes.INTEGER,

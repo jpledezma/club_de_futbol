@@ -1,7 +1,14 @@
 import Players from "../models/players.model.js";
 
-async function createPlayer(player: Players) {
-    const { team, dni, firstName, lastName, birthDate, shirtNumber } = player;
+async function createPlayer(
+    team: number,
+    dni: number,
+    firstName: string,
+    lastName: string,
+    birthDate: string,
+    shirtNumber: number,
+    active: boolean
+) {
     const newPlayer = await Players.create({
         team,
         dni,
@@ -9,7 +16,7 @@ async function createPlayer(player: Players) {
         lastName,
         birthDate,
         shirtNumber,
-        active: true
+        active
     });
 
     return newPlayer;

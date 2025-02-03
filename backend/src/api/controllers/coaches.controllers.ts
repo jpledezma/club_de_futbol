@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { sendServerError } from "../middlewares/middlewares.js";
+import { sendServerError, validateData } from "../middlewares/server.js";
 import coachesService from "../services/coaches.service.js";
+import { validateId, removeExtraWhiteSpaces } from "../middlewares/validations.js";
 
 async function getCoaches (req: Request, res: Response) {
     try {
@@ -17,7 +18,7 @@ async function getCoachById(req: Request, res: Response) {
     const { id } = req.params;
 
     try {
-        if (!id || isNaN(Number(id.trim())))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const coachFound = await coachesService.getCoachById(+id);
@@ -36,10 +37,21 @@ async function getCoachById(req: Request, res: Response) {
 }
 
 async function createCoach(req: Request, res: Response) {
-    const newCoach = req.body;
+    const { team, dni, firstName, lastName, address, phoneNumber, email } = req.body;
 
-    try {
-        await coachesService.createCoach(newCoach)
+    try {        
+        validateData({ team, dni, firstName, lastName, address, phoneNumber, email });
+
+        await coachesService.createCoach(
+            +team,
+            +dni,
+            removeExtraWhiteSpaces(firstName),
+            removeExtraWhiteSpaces(lastName),
+            removeExtraWhiteSpaces(address),
+            phoneNumber,
+            email
+        )
+
         res.status(200);
         res.json({ message: "Coach created successfully" });
     }
@@ -53,8 +65,9 @@ async function updateCoach(req: Request, res: Response) {
     const newCoachData = req.body;
     
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
+        validateData(newCoachData);
 
         const updatedCoach = await coachesService.updateCoach(+id, newCoachData)
         if (updatedCoach[0] === 0) {
@@ -73,7 +86,7 @@ async function updateCoach(req: Request, res: Response) {
 async function deleteCoach(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        if (!id || isNaN(Number(id)))
+        if (!validateId(+id))
             throw new Error("Invalid format for 'id'");
 
         const deletedCoach = await coachesService.deleteCoach(+id);

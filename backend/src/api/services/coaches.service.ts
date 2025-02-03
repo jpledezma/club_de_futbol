@@ -1,7 +1,14 @@
 import Coaches from "../models/coaches.model.js";
 
-async function createCoach(coach: Coaches) {
-    const { team, dni, firstName, lastName, address, phoneNumber, email } = coach;
+async function createCoach(
+    team: number,
+    dni: number,
+    firstName: string,
+    lastName: string,
+    address: string,
+    phoneNumber: string,
+    email: string
+) {
     const newCoach = await Coaches.create({
         team,
         dni,
@@ -25,7 +32,7 @@ async function getCoachById(id: number) {
     return coach;
 }
 
-async function updateCoach(id: number, newCoach: object) {
+async function updateCoach(id: number, newCoach: Record<PropertyKey, unknown>) {
     const coach =  await Coaches.update(
         newCoach, {
             where: { id: id }
