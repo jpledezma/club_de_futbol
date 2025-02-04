@@ -1,7 +1,7 @@
 function validateId(id: number | undefined): boolean {
     let validId: boolean;
 
-    if (!id || !Number.isInteger(id))
+    if (!id || !Number.isInteger(id) || id < 1)
         validId = false;
     else
         validId = true;
@@ -20,11 +20,11 @@ function validateDNI(dni: number | undefined): boolean {
     return validDNI;
 }
 
-function validateName(name: string): boolean {
-    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
+function validateName(name: string | undefined): boolean {
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜüÖöÏïËëÄäÙùÒòÌìÈèÀà\s\'\-]+$/;
     let validName;
     // No se puede confiar en la gente
-    if (typeof name === "string" && regex.test(name))
+    if (typeof name === "string" && regex.test(name.trim()))
         validName = true;
     else
         validName = false;
@@ -32,7 +32,7 @@ function validateName(name: string): boolean {
     return validName;
 }
 
-function validateDate(date: string): boolean {
+function validateDate(date: string | undefined): boolean {
     let validDate: boolean;
     const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
     
@@ -57,7 +57,7 @@ function validateDate(date: string): boolean {
     return validDate;
 }
 
-function validatePhoneNumber(phoneNumber: string): boolean {
+function validatePhoneNumber(phoneNumber: string | undefined): boolean {
     const regex = /^\+?\d+([ -]?\(?\d+\)?[ -]?)*\d+$/;
     let validPhoneNumber;
 
@@ -69,7 +69,7 @@ function validatePhoneNumber(phoneNumber: string): boolean {
     return validPhoneNumber;
 }
 
-function validateEmail(email: string): boolean {
+function validateEmail(email: string | undefined): boolean {
     // Permitir email nulo
     if (!email)
         return true;
