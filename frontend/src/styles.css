@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;  
+
+.btn-header {
+    @apply uppercase bg-gray-600 rounded-full p-2 hover:bg-gray-700 mr-2;
+}

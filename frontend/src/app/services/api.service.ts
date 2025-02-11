@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { computed, effect, Injectable, signal, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,12 +7,28 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
 
-  private apiUrl = 'http://localhost:3000'; 
+  private readonly serverResponseSignal = signal<any | null>(null);
+  static readonly serverUrl: string = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) { }
-  
-  getMessage(): Observable<{message:string}> {
-    return this.http.get<{message:string}>(`${this.apiUrl}/`);
+  get serverResponse() {
+    return this.serverResponseSignal();
   }
+  constructor(private http: HttpClient) {
+    effect(() => {
+      const response = this.serverResponseSignal();
+      if (response) {
+        console.log('Respuesta del servidor:', response);
+      }
+    });
+ }
+
+ fetchServerResponse() {
+  this.http.get<any>(`${ApiService.serverUrl}/`)
+    .subscribe({
+      next: (response) => this.serverResponseSignal.set(response),
+      error: (err) => console.error('Error al obtener la respuesta del servidor:', err)
+    });
+}
+
 }
  

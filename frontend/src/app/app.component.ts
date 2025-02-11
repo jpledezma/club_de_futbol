@@ -1,28 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApiService } from './services/api.service';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit{
 
-  message: string = '';
-
-  constructor(private apiService:ApiService){}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.apiService.getMessage().subscribe(
-      (response) => {
-        this.message = response.message;
-      },
-      (error) => {
-        console.error('Error al obtener el mensaje:', error);
-      }
-    );
+    // this.apiService.fetchServerResponse();
   }
 }

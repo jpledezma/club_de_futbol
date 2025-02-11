@@ -1,0 +1,11 @@
+<header class="py-3 px-2 flex justify-between items-center border-b">
+    <h2 routerLink="/home" class="text-5xl uppercase">TuClub</h2>
+    <nav class="">
+        <button routerLink="/news" class="btn-header">Noticias</button>
+        <button routerLink="/us" class="btn-header">Nosotros</button>
+        <button routerLink="/Inscription" class="btn-header m-0">Inscripción</button>
+        @if(flag) {
+            <button routerLink="./">Iniciar Sesión</button>
+        }
+    </nav>
+</header>
