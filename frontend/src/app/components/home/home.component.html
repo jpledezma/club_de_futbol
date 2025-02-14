@@ -1,0 +1,13 @@
+<h1 class="text-4xl uppercase text-center m-2">Bienvenidos</h1>
+<section class="flex justify-center">
+    <p-carousel [value]="images" [numVisible]="1" [numScroll]="1" [circular]="false" autoplayInterval="3000" class="max-w-lg">
+        <ng-template let-image #item>
+            <img ngSrc="{{image}}" alt="imagen slider"width="500" height="20" priority>
+        </ng-template>
+    </p-carousel>
+</section>
+
+<main class="flex justify-evenly mx-4 my-6">
+    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas esse delectus ex vel in maiores doloremque veniam obcaecati quibusdam deleniti ipsa recusandae totam quia natus voluptatem, minima nostrum ad fuga. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum rerum voluptas in animi, at consequatur, et nostrum debitis deleniti vel sit, eligendi dolores tempora odit nam facilis expedita necessitatibus commodi.<br>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi obcaecati omnis veniam, adipisci, quisquam consequuntur consectetur sit, dicta ipsa voluptatem molestias eaque optio quod ad illo? Nulla veniam illum ab.</p>
+    <div class="img-home"></div>
+</main>

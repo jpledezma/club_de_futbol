@@ -4,5 +4,12 @@
 @tailwind utilities;  
 
 .btn-header {
-    @apply uppercase bg-gray-600 rounded-full p-2 hover:bg-gray-700 mr-2;
+    @apply uppercase rounded-full p-2 mr-2 hover:bg-gray-700 hover:animate-bounce;
 }
+
+.darumadrop-one-regular {
+    font-family: "Darumadrop One", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  

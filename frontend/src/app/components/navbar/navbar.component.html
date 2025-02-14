@@ -1,9 +1,13 @@
 <header class="py-3 px-2 flex justify-between items-center border-b">
-    <h2 routerLink="/home" class="text-5xl uppercase">TuClub</h2>
-    <nav class="">
-        <button routerLink="/news" class="btn-header">Noticias</button>
-        <button routerLink="/us" class="btn-header">Nosotros</button>
-        <button routerLink="/Inscription" class="btn-header m-0">Inscripción</button>
+    <div routerLink="/home" class="flex group">
+        <h2 class="text-5xl uppercase darumadrop-one-regular">Tu</h2>
+        <div class="img-pelota group-hover:animate-bounce"></div>
+        <h2 class="text-5xl uppercase darumadrop-one-regular">Club</h2>
+    </div>
+    <nav>
+        <button routerLink="/news" class="bg btn-header">Noticias</button>
+        <button routerLink="/us" class="bg btn-header">Nosotros</button>
+        <button routerLink="/Inscription" class="bg btn-header m-0">Inscripción</button>
         @if(flag) {
             <button routerLink="./">Iniciar Sesión</button>
         }
